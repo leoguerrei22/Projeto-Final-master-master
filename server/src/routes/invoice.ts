@@ -4,7 +4,7 @@ import { CrudService } from '../services/crud.service';
 
 const router = express.Router();
 
-const actions = new BaseAction(new CrudService('pedido'));
+const actions = new BaseAction(new CrudService('invoice'));
 
 router.get('/', (req, res) => actions.all(req, res));
 router.get('/:id', (req, res) => actions.detail(req, res));

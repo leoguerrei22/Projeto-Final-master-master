@@ -4,7 +4,7 @@ import { CrudService } from '../services/crud.service';
 
 const router = express.Router();
 
-const actions = new BaseAction(new CrudService('produto'));
+const actions = new BaseAction(new CrudService('order'));
 
 router.get('/', (req, res) => actions.all(req, res));
 router.get('/:id', (req, res) => actions.detail(req, res));

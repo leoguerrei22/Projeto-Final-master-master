@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { verify } from 'jsonwebtoken';
 import UsersService from '../services/users.service';
+import { ExtendedPayload } from "../modals/tokens";
 
 const publicEndpoints = [
-  { path: "/utilizadores/login", method: "POST" },
-  { path: "/utilizadores/register", method: "POST" },
+  { path: "/user/login", method: "POST" },
+  { path: "/user/register", method: "POST" },
 ];
 
 const usersService = new UsersService();
@@ -51,7 +52,7 @@ export function verifyToken(
       });
     }
 
-    const { user_id: id } = payload as any;
+    const { id } = payload as ExtendedPayload;
 
     const user = await usersService.getById(id);
 
@@ -63,7 +64,7 @@ export function verifyToken(
     }
 
     request.user = user;
-
+    
     next();
   });
 }

@@ -1,14 +1,20 @@
-import routes from './src/routes';
+import routes from './routes';
 import express, { NextFunction, Request, Response } from "express";
-import { verifyToken } from './src/middleware/authenticate';
+import { verifyToken } from './middleware/authenticate';
+import cors from 'cors';
 
+require('dotenv').config();
 
 const app = express();
 
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
 // Middlewares
 app.use(express.json()); // for parsing application/json
-
-//!!/ recomendação do gepeto de usar isso num middleware a parte para evitar confusão no caso do codigo aumentar
 
 const requestLogger = (
   request: Request,
@@ -27,7 +33,7 @@ app.use(verifyToken);
 app.use(routes);
 
 // Start the server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server is running in http://localhost:${PORT}`);
 });

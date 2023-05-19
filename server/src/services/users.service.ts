@@ -5,12 +5,12 @@ import jwt from 'jsonwebtoken';
 export default class UsersService extends CrudService {
 
   constructor() {
-    super('utilizadores');
+    super('user');
   }
-  
+
   async create(dto: any) {
     const hashedPassword = await bcrypt.hash(dto.password, 10);
-    return this.prisma.utilizador.create({
+    return this.prisma.user.create({
       data: {
         ...dto,
         password: hashedPassword,
@@ -23,16 +23,15 @@ export default class UsersService extends CrudService {
       const hashedPassword = await bcrypt.hash(dto.password, 10);
       dto.password = hashedPassword;
     }
-    return this.prisma.utilizador.update({
+    return this.prisma.user.update({
       where: {
         id,
       },
       data: dto,
     });
   }
-
-  async authenticate(email: string, password: string): Promise<any> {
-    const user = await this.prisma.utilizador.findUnique({ where: { email } });
+async authenticate(email: string, password: string): Promise<any> {
+    const user = await this.prisma.user.findUnique({ where: { email } });
 
     if (user && await bcrypt.compare(password, user.password)) {
       const secret = process.env.JWT_SECRET;

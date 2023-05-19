@@ -16,7 +16,7 @@ export class CrudService implements CrudServiceInterface {
     }
   
     async getById(id: number) {
-        return this.prisma[this.table].findUnique({ where: { id } });
+        return this.prisma[this.table].findUnique({ where: { id:id} });
     }
     
     async create(data: any) {
