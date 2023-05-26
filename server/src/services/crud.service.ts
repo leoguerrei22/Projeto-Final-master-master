@@ -10,7 +10,6 @@ export class CrudService implements CrudServiceInterface {
         this.table = table;
     }
 
-
     async getAll() {
         return this.prisma[this.table].findMany();
     }

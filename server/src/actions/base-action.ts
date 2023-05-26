@@ -7,7 +7,6 @@ export interface CrudServiceInterface {
     update: (id: number, body: any) => Promise<any>;
     delete: (id: number) => Promise<any>;
     authenticate: (email: string, password: string) => Promise<any>;
-
 }
 
 export default class BaseAction {

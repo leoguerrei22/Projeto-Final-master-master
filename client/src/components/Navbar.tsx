@@ -1,54 +1,56 @@
-"use client"
-import { useState } from 'react'
-import Link from 'next/link'
+"use client";
+import { useState } from "react";
+import Link from "next/link";
+import { Link as ChakraLink } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
+import LoginModal from "./login";
 
+export default function Navigation() {
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
-export default function Navbar() {
-
-  const [showReserva, setShowReserva] = useState(false)
+  const handleLogin = () => {
+    setIsUserLoggedIn(!isUserLoggedIn);
+  };
 
   return (
-    <nav className="bg-transparent text-blue-500">
-      <ul className="flex justify-around">
-        <li>
-          <Link href="/">
+    <nav className="flex justify-between items-center p-5">
+        <img src="/images/Zeferino.png" alt="Logo" width={75} height={75} />  
+      <div className="flex justify-center items-center space-x-4 flex-grow">
+        <Link href="/" passHref>
+          <ChakraLink color="white" _hover={{ textDecoration: 'underline', cursor: 'pointer' }}>
+            Home
+          </ChakraLink>
+        </Link>
+        <Link href="/menu" passHref>
+          <ChakraLink color="white" _hover={{ textDecoration: 'underline', cursor: 'pointer' }}>
             Menu
-          </Link>
-        </li>
-        <li>
-          <Link href="/service">
-            Serviço
-          </Link>
-        </li>
-        <li>
-          {/* Aqui você pode adicionar o seu logo */}
-          <Link href="/">
-          Logo
-          </Link>
-        </li>
-        <li>
-          <Link href="/contact">
-            Contacto
-          </Link>
-        </li>
-        <li>
-          <Link href="/about">
+          </ChakraLink>
+        </Link>
+        <Link href="/reserva" passHref>
+          <ChakraLink color="white" _hover={{ textDecoration: 'underline', cursor: 'pointer' }}>
+            Reserva
+          </ChakraLink>
+        </Link>
+        <Link href="/about" passHref>
+          <ChakraLink color="white" _hover={{ textDecoration: 'underline', cursor: 'pointer' }}>
             About Us
-          </Link>
-        </li>
-        {showReserva && (
-          <li>
-            <Link href="/reserva">
-              Reserva
-            </Link>
-          </li>
-        )}
-        <li>
-          <a onClick={() => setShowReserva(!showReserva)}>
-            {showReserva ? 'Logout' : 'Login'}
-          </a>
-        </li>
-      </ul>
+          </ChakraLink>
+        </Link>
+      </div>
+      <div className="flex items-center space-x-4">
+        <Button
+          color="white"
+          borderColor="white"
+          borderWidth={2}
+          variant="outline"
+          py={2}
+          width="100px" 
+          onClick={handleLogin} // Aqui está a mudança
+        >
+          {isUserLoggedIn ? "Logout" : "Login"}
+        </Button>
+        {isUserLoggedIn && <LoginModal closeModal={handleLogin} />}
+      </div>
     </nav>
-  )
+  );
 }
