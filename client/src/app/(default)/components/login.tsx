@@ -2,6 +2,7 @@
 import { useContext, FormEvent, useState } from 'react';
 import { useAppContext } from '../../../context/AppContext'; // Ajuste este import de acordo com a localização do seu context
 import { useRouter } from 'next/navigation';
+import RegisterModal from './register';
 
 type LoginModalProps = {
   closeModal: () => void;
@@ -14,7 +15,13 @@ const Login: React.FC<LoginModalProps> = ({ closeModal }) => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showRegisterModal, setShowRegisterModal] = useState(false); // Adicionado estado para o modal de registro
 
+
+  const handleRegisterClick = () => {
+    // Abra o modal de registro
+    setShowRegisterModal(true);
+  };
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -22,12 +29,13 @@ const Login: React.FC<LoginModalProps> = ({ closeModal }) => {
     setError('');
     
     try {
-      console.log('Attempting to login');
       const authResponse = await login(email, password);
       const { role } = authResponse.token; // Aqui é como você pode extrair o role
       if (role > 1) {
         closeModal();
         router.push("/staff");
+      } else if (role == 1) {
+        closeModal();
       } else {
         setError('Not authorized to access this resource');
       }
@@ -54,7 +62,7 @@ const Login: React.FC<LoginModalProps> = ({ closeModal }) => {
                   name="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md text-black"
                   placeholder="Email"
                 />
               </div>
@@ -82,12 +90,13 @@ const Login: React.FC<LoginModalProps> = ({ closeModal }) => {
           </div>
           <div className="mt-5 sm:mt-6">
             <div className="text-sm leading-5">
-              <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                Registre-se
-              </a>
+              <button onClick={handleRegisterClick} className="font-medium text-indigo-600 hover:text-indigo-500">
+                 Registre-se
+              </button>
             </div>
           </div>
         </div>
+          {showRegisterModal && <RegisterModal closeModal={() => {setShowRegisterModal(false); closeModal();}} />}
       </div>
     </div>
   );

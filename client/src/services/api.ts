@@ -19,7 +19,6 @@ api.interceptors.request.use((config) => {
   const token = getAuthToken();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
-    console.log(token)
   }
   return config;
 });
@@ -28,7 +27,6 @@ api.interceptors.request.use((config) => {
 export async function getUserDetails(id: number | undefined) {
   try {
     const response = await api.get(`/user/${id}`);
-    console.log(id);
     return response.data;
   } catch (error) {
     console.error(error);
