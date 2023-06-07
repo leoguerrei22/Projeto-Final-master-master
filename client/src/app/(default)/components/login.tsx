@@ -1,26 +1,42 @@
-import UserContext from '@/context/user';
-import { login } from '@/services/authService';
-import { FormEvent, useContext, useState } from 'react';
+
+import { useContext, FormEvent, useState } from 'react';
+import { useAppContext } from '../../../context/AppContext'; // Ajuste este import de acordo com a localização do seu context
+import { useRouter } from 'next/navigation';
 
 type LoginModalProps = {
-    closeModal: () => void;
+  closeModal: () => void;
 };
 
-const LoginModal: React.FC<LoginModalProps> = ({ closeModal }) => {
+const Login: React.FC<LoginModalProps> = ({ closeModal }) => {
+  const router = useRouter();
+  const { state, login, logout } = useAppContext();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { setUser } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    setLoading(true);
+    setError('');
+    
     try {
-        const user = await login(email, password);
-        setUser(user);
-      } catch (err) {
-        console.log(err);
+      console.log('Attempting to login');
+      const authResponse = await login(email, password);
+      const { role } = authResponse.token; // Aqui é como você pode extrair o role
+      if (role > 1) {
+        closeModal();
+        router.push("/staff");
+      } else {
+        setError('Not authorized to access this resource');
       }
+    } catch (error) {
+      console.error('Failed to login', error);
+      setError('Failed to login');
+    }
+    setLoading(false);
   };
-
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -46,10 +62,12 @@ const LoginModal: React.FC<LoginModalProps> = ({ closeModal }) => {
                 <input
                   type="password"
                   name="password"
+                  
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="text-black shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                   placeholder="Senha"
+                
                 />
               </div>
               <div className="mt-5">
@@ -75,4 +93,4 @@ const LoginModal: React.FC<LoginModalProps> = ({ closeModal }) => {
   );
 };
 
-export default LoginModal;
+export default Login;

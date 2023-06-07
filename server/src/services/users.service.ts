@@ -30,9 +30,9 @@ export default class UsersService extends CrudService {
       data: dto,
     });
   }
-async authenticate(email: string, password: string): Promise<any> {
+  async authenticate(email: string, password: string): Promise<any> {
     const user = await this.prisma.user.findUnique({ where: { email } });
-
+  
     if (user && await bcrypt.compare(password, user.password)) {
       const secret = process.env.JWT_SECRET;
       if (!secret) {
@@ -41,13 +41,16 @@ async authenticate(email: string, password: string): Promise<any> {
       const token = jwt.sign({ id: user.id }, secret, {
         expiresIn: 86400, // expires in 24 hours
       });
-
-      return token;
+  
+      return {
+        token: token,
+        id: user.id,
+        role: user.role, // supondo que `role` é uma propriedade do usuário
+      };
     } else {
       throw new Error('Invalid credentials');
     }
   }
-
   verifyToken(token: string) {
     const secret = process.env.JWT_SECRET;
     if (!secret) {
