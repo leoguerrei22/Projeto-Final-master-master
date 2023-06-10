@@ -6,6 +6,9 @@ import { User } from '@/models/types';
 import { getUserDetails } from '@/services/api';
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
+import Admin from '../components/admin/structure';
+import Cozinha from '../components/cozinha/structure';
+import Salao from '../components/salao/structure';
 
 
 export default function Staff() {
@@ -74,19 +77,19 @@ export default function Staff() {
                 {activeTab === 'salao' && (
                     <div>
                         <h3 className="text-lg mb-4">Atividades de salão</h3>
-                        {/* Adicione aqui os componentes de consulta de reservas, atribuição de mesa, adição/remoção de pedidos */}
+                        {<Salao/>}
                     </div>
                 )}
                 {activeTab === 'cozinha' && (
                     <div>
                         <h3 className="text-lg mb-4">Atividades de cozinha</h3>
-                        {/* Adicione aqui os componentes relevantes para a cozinha */}
+                        {<Cozinha/>}
                     </div>
                 )}
                 {activeTab === 'administrativas' && (
                     <div>
                         <h3 className="text-lg mb-4">Atividades administrativas</h3>
-                        {/* Adicione aqui os componentes relevantes para as atividades administrativas */}
+                        {<Admin/>}
                     </div>
                 )}
             </div>

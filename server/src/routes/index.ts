@@ -3,7 +3,7 @@ import user from "./user";
 import invoice from "./invoice";
 import order from "./order";
 import reservation from "./reservation";
-
+import table from "./table";
 import products from "./product";
 import { name, version } from "../../package.json";
 
@@ -20,6 +20,7 @@ router.use("/user", user);
 router.use("/product", products);
 router.use("/invoice", invoice);
 router.use("/order", order);
+router.use("/table", table);
 router.use("/reservation", reservation);
 
 export default router;

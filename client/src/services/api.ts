@@ -1,6 +1,5 @@
-// services/api.ts
-
-import axios from 'axios';
+import { Order } from '@/models/types';
+import axios, { AxiosResponse } from 'axios';
 
 // Configuração do axios
 const api = axios.create({
@@ -14,6 +13,7 @@ const api = axios.create({
 function getAuthToken() {
   return localStorage.getItem('authToken');
 }
+
 // Adicionar um interceptor para definir o cabeçalho de autorização com o token JWT
 api.interceptors.request.use((config) => {
   const token = getAuthToken();
@@ -33,5 +33,29 @@ export async function getUserDetails(id: number | undefined) {
     return null;
   }
 }
+
+// Definir função para obter pedidos por status
+export const getAllOrders = async (): Promise<Order[]> => {
+  const response: AxiosResponse<Order[]> = await api.get('/order');
+
+  if (response.status !== 200) {
+    throw new Error(`Error: ${response.status}`);
+  }
+
+  return response.data;
+};
+
+export async function updateOrderStatus(orderId: number, newStatus: string): Promise<Order> {
+  try {
+    const response = await api.patch(`/order/${orderId}`, {
+      status: newStatus,
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 
 // Definir outras funções de chamada de API aqui...
