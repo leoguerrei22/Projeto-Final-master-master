@@ -1,3 +1,4 @@
+//src/actions/base-action.ts
 import { Request, Response } from "express";
 
 export interface CrudServiceInterface {
@@ -7,6 +8,8 @@ export interface CrudServiceInterface {
     update: (id: number, body: any) => Promise<any>;
     delete: (id: number) => Promise<any>;
     authenticate: (email: string, password: string) => Promise<any>;
+    addOrderToReservation?: (reservationId: number, order: any, products: any[]) => Promise<any>;
+    generateInvoiceForReservation?: (reservationId: number, invoice: any) => Promise<any>;
 }
 
 export default class BaseAction {
@@ -76,4 +79,39 @@ export default class BaseAction {
         }
     }
 
+
+  async addOrderToReservation(req: Request, res: Response) {
+    if (!this.service.addOrderToReservation) {
+      return res.status(500).json({ message: 'This operation is not supported.' });
+    }
+
+    const { id } = req.params;
+    const order = req.body.order;
+    const products = req.body.products;
+
+    try {
+      const result = await this.service.addOrderToReservation(+id, order, products);
+
+      return res.status(200).json(result);
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+  
+  async generateInvoiceForReservation(req: Request, res: Response) {
+    if (!this.service.generateInvoiceForReservation) {
+      return res.status(500).json({ message: 'This operation is not supported.' });
+    }
+
+    const { id } = req.params;
+
+const invoice = req.body;
+
+    try {
+      const result = await this.service.generateInvoiceForReservation(+id, invoice);
+      return res.status(200).json(result);
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
 }

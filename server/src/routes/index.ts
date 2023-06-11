@@ -1,3 +1,4 @@
+//src/routes/index.ts
 import express, { Request, Response } from "express";
 import user from "./user";
 import invoice from "./invoice";
@@ -19,8 +20,8 @@ router.get("/", (req: Request, res: Response) =>
 router.use("/user", user);
 router.use("/product", products);
 router.use("/invoice", invoice);
+router.use("/reservation", reservation);
 router.use("/order", order);
 router.use("/table", table);
-router.use("/reservation", reservation);
 
 export default router;

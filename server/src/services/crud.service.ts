@@ -1,15 +1,15 @@
+//src/services/crud.service.ts
 import { PrismaClient } from "@prisma/client";
 import { CrudServiceInterface } from "../actions/base-action";
 
 export class CrudService implements CrudServiceInterface {
 
     protected prisma = new PrismaClient();
-    private table: string;
+    protected table: string;
 
     constructor(table: string) {
         this.table = table;
     }
-
     async getAll() {
         return this.prisma[this.table].findMany();
     }
