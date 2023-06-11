@@ -1,31 +1,30 @@
   //src/app/(backoffice)/components/cozinha/structure.tsx
   import React, { useEffect, useState } from 'react';
-  import { getAllOrders } from '@/services/api';
+  import apiService from '@/services/api';
   import { Order } from '@/models/types';
   import OrderService from './OrderService';
-
+  
   const Cozinha: React.FC = () => {
     const [selectedTable, setSelectedTable] = useState<string | null>(null);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [orders, setOrders] = useState<Order[]>([]);
     const [message, setMessage] = useState<string | null>(null);
-
-
+  
     const tables = ['Order'];
-
+  
     const handleTableClick = (tableName: string) => {
       setSelectedTable(tableName === selectedTable ? null : tableName);
     };
-
+  
     useEffect(() => {
       if (selectedTable === 'Order') {
         loadOrders();
       }
-    }, [selectedCategory]);
+    }, [selectedCategory, selectedTable]);
     
     const loadOrders = async () => {
       try {
-        const allOrders = await getAllOrders(); // Sempre carregue todos os pedidos
+        const allOrders = await apiService.getAll('order'); // Sempre carregue todos os pedidos
   
         const today = new Date();
         const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
@@ -44,17 +43,12 @@
         } else {
           setMessage(null);
         }
-  
-        setOrders(filteredOrders);
       } catch (error) {
         setMessage("Ops... Há algo de errado :(");
         console.error(error);
       }
     };
-    
-    
-    
-    
+
     return (
       <div className="flex w-full h-screen">
         {/* Sidebar */}
@@ -70,25 +64,26 @@
               </button>
               {selectedTable === table && (
                 <div className="ml-4 flex flex-col space-y-2">
-                  <button onClick={() => setSelectedCategory('Todos')}>Todos</button>
-                  <button onClick={() => setSelectedCategory('Concluidos')}>Concluidos</button>
-                  <button onClick={() => setSelectedCategory('Novos')}>Novos</button>
+                  <button onClick={() => setSelectedCategory('todos')}>Todos</button>
+                  <button onClick={() => setSelectedCategory('concluidos')}>Concluídos</button>
+                  <button onClick={() => setSelectedCategory('novos')}>Novos</button>
                 </div>
               )}
             </div>
           ))}
         </div>
-
+  
         {/* Main Content */}
         <div className="w-4/5 bg-gray-200 p-4">
-      <h1 className="text-xl font-bold mb-4">Manage {selectedTable}</h1>
-      {message && <p>{message}</p>}
-      {orders.map((order) => (
-        <OrderService key={order.id} order={order} />
-      ))}
-    </div>
+          <h1 className="text-xl font-bold mb-4">Manage {selectedTable}</h1>
+          {message && <p>{message}</p>}
+          {orders.map((order) => (
+            <OrderService key={order.id} order={order} />
+          ))}
+        </div>
       </div>
     );
   };
+  
 
   export default Cozinha;

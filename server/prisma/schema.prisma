@@ -71,7 +71,6 @@ model Order {
   status        String       @default("pending")
   invoice       Invoice?     @relation(fields: [invoiceID], references: [id])
   invoiceID     Int?
-  totalPrice    Float
   deleted       Boolean      @default(false)
 }
 

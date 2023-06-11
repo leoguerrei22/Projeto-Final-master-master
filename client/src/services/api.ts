@@ -1,3 +1,4 @@
+//src/services/api.ts
 import { Order } from '@/models/types';
 import axios, { AxiosResponse } from 'axios';
 
@@ -33,29 +34,28 @@ export async function getUserDetails(id: number | undefined) {
     return null;
   }
 }
-
-// Definir função para obter pedidos por status
-export const getAllOrders = async (): Promise<Order[]> => {
-  const response: AxiosResponse<Order[]> = await api.get('/order');
-
-  if (response.status !== 200) {
-    throw new Error(`Error: ${response.status}`);
-  }
-
-  return response.data;
+// Generic API service
+const apiService = {
+  async getAll(tableName: string) {
+    const response = await api.get(`/${tableName}`);
+    return response.data;
+  },
+  async getById(tableName: string, id: number) {
+    const response = await api.get(`/${tableName}/${id}`);
+    return response.data;
+  },
+  async create(tableName: string, record: any) {
+    const response = await api.post(`/${tableName}`, record);
+    return response.data;
+  },
+  async update(tableName: string, id: number, record: any) {
+    const response = await api.put(`/${tableName}/${id}`, record);
+    return response.data;
+  },
+  async delete(tableName: string, id: number) {
+    const response = await api.delete(`/${tableName}/${id}`);
+    return response.data;
+  },
 };
 
-export async function updateOrderStatus(orderId: number, newStatus: string): Promise<Order> {
-  try {
-    const response = await api.patch(`/order/${orderId}`, {
-      status: newStatus,
-    });
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
-
-// Definir outras funções de chamada de API aqui...
+export default apiService;

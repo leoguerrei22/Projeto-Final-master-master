@@ -53,26 +53,26 @@ export default function Staff() {
             <p className="mb-8">Data e hora: {currentDate}</p>
 
             <div>
-                <div className="mb-4 flex">
-                    <button
-                        className={`px-4 py-2 ${activeTab === 'salao' ? 'font-semibold underline' : ''}`}
-                        onClick={() => setActiveTab('salao')}
-                        >
-                        Atividades de salão
-                    </button>
-                    <button
-                        className={`px-4 py-2 ${activeTab === 'cozinha' ? 'font-semibold underline' : ''}`}
-                        onClick={() => setActiveTab('cozinha')}
-                        >
-                        Atividades de cozinha
-                    </button>
-                    <button
-                        className={`px-4 py-2 ${activeTab === 'administrativas' ? 'font-semibold underline' : ''}`}
-                        onClick={() => setActiveTab('administrativas')}
-                        >
-                        Atividades administrativas
-                    </button>
-                </div>
+            <div className="mb-4 flex border-b border-gray-200">
+    <button
+      className={`px-4 py-2 rounded-tl-lg ${activeTab === 'salao' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800'}`}
+      onClick={() => setActiveTab('salao')}
+    >
+      Atividades de salão
+    </button>
+    <button
+      className={`px-4 py-2 ${activeTab === 'cozinha' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800'}`}
+      onClick={() => setActiveTab('cozinha')}
+    >
+      Atividades de cozinha
+    </button>
+    <button
+      className={`px-4 py-2 rounded-tr-lg ${activeTab === 'administrativas' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800'}`}
+      onClick={() => setActiveTab('administrativas')}
+    >
+      Atividades administrativas
+    </button>
+  </div>
 
                 {activeTab === 'salao' && (
                     <div>
