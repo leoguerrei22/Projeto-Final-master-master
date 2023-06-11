@@ -44,8 +44,11 @@ const apiService = {
     const response = await api.get(`/${tableName}/${id}`);
     return response.data;
   },
+
   async create(tableName: string, record: any) {
+    console.log(`Creating new ${tableName}:`, record); // Log the record
     const response = await api.post(`/${tableName}`, record);
+    console.log(`Response from server:`, response.data); // Log the response
     return response.data;
   },
   async update(tableName: string, id: number, record: any) {

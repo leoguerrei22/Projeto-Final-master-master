@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import TableService from './TableService';
 import UserService from './UserService';
+import ProductService from './productService';
 
 const Admin: React.FC = () => {
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
@@ -34,6 +35,7 @@ const Admin: React.FC = () => {
         <h1 className="text-xl font-bold mb-4">Manage {selectedTable}</h1>
         {selectedTable === 'Table' && <TableService selectedTable={selectedTable} />}
         {selectedTable === 'User' && <UserService />}
+        {selectedTable === 'Product' && <ProductService />}
       </div>
     </div>
   );

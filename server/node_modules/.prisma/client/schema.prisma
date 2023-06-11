@@ -79,6 +79,7 @@ model Product {
   name        String @db.VarChar(255)
   category    String @db.VarChar(255)
   observations String? @db.VarChar(255)
+  stock       Int   @default(0)
   status      String @default("unavailable")
   orders      Order[]
   price       Float

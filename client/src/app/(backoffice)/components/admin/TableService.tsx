@@ -60,9 +60,9 @@ const TableService: React.FC<{selectedTable: string}> = ({ selectedTable }) => {
       try {
         let response: Table;
         const preparedTable = {
-          ...table,
           number: Number(table.number),
           seats: Number(table.seats),
+          status: table.status,
         };
         if (isUpdateMode) {
           response = await apiService.update('table', table.id, preparedTable);
