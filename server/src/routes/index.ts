@@ -4,6 +4,7 @@ import user from "./user";
 import invoice from "./invoice";
 import order from "./order";
 import reservation from "./reservation";
+import reservationtable from "./reservationtable";
 import table from "./table";
 import products from "./product";
 import { name, version } from "../../package.json";
@@ -21,6 +22,7 @@ router.use("/user", user);
 router.use("/product", products);
 router.use("/invoice", invoice);
 router.use("/reservation", reservation);
+router.use("/reservationtable", reservationtable);
 router.use("/order", order);
 router.use("/table", table);
 

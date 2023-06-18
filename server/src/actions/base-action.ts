@@ -10,6 +10,8 @@ export interface CrudServiceInterface {
     authenticate: (email: string, password: string) => Promise<any>;
     addOrderToReservation?: (reservationId: number, order: any, products: any[]) => Promise<any>;
     generateInvoiceForReservation?: (reservationId: number, invoice: any) => Promise<any>;
+    getAvailableTables?: (date: Date, hour: string) => Promise<any>;
+    createReservation?: (data: any) => Promise<any>;
 }
 
 export default class BaseAction {
@@ -114,4 +116,35 @@ const invoice = req.body;
       return res.status(500).json({ message: error.message });
     }
   }
+
+  async getAvailableTables(req: Request, res: Response) {
+    if (!this.service.getAvailableTables) {
+        return res.status(500).json({ message: 'This operation is not supported.' });
+    }
+
+    const { date, hour } = req.query;
+
+    try {
+        const availableTables = await this.service.getAvailableTables(new Date(date as string), hour as string);
+        console.log(availableTables);
+        return res.status(200).json(availableTables);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+async createReservation(req: Request, res: Response) {
+    if (!this.service.createReservation) {
+        return res.status(500).json({ message: 'This operation is not supported.' });
+    }
+
+    try {
+        const reservation = await this.service.createReservation(req.body);
+        return res.status(200).json(reservation);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+
 }

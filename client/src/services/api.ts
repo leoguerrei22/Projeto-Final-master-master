@@ -34,6 +34,30 @@ export async function getUserDetails(id: number | undefined) {
     return null;
   }
 }
+
+// Adicione o pedido a uma reserva existente
+export async function addOrderToReservation(reservationId: number, order: any, products: any[]) {
+  const response = await api.post(`/reservation/${reservationId}/order`, { order, products });
+  return response.data;
+}
+
+// Gere a fatura para uma reserva
+export async function generateInvoiceForReservation(reservationId: number, invoice: any) {
+  const response = await api.post(`/reservation/${reservationId}/invoice`, invoice);
+  return response.data;
+}
+
+// Obtenha mesas disponíveis
+export async function getAvailableTables(date: string, hour: string) {
+  const response = await api.get(`/tables/available?date=${date}&hour=${hour}`);
+  return response.data;
+}
+
+// Crie uma nova reserva
+export async function createReservation(data: any) {
+  const response = await api.post(`/reservation`, data);
+  return response.data;
+}
 // Generic API service
 const apiService = {
   async getAll(tableName: string) {

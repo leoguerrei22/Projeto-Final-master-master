@@ -171,7 +171,11 @@ const UserService: React.FC = () => {
     if (editUser) {
       setIsLoading(true);
       try {
-        const response = await apiService.update('user', id, editUser);
+        const updatedUser = {...editUser};
+        if (updatedUser.password === "") {
+          delete updatedUser.password;
+        }
+        const response = await apiService.update('user', id, updatedUser);
         const updatedUsers = users.map((u) => u.id === id ? response : u);
         setUsers(updatedUsers);
         setEditUser(null); // reset 'editUser' after update
@@ -184,6 +188,7 @@ const UserService: React.FC = () => {
       }
     }
   };
+
 
   // restante do seu código...
 

@@ -1,10 +1,9 @@
 import React from 'react'
-import RegisterModal from '../components/register'
 
-export default function about() {
+export default function page() {
   return (
     <div>
-
+      
     </div>
   )
 }
