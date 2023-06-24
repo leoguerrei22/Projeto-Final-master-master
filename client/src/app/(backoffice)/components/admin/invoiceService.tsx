@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getReservations, generateInvoiceForReservation, getAllInvoices, getInvoiceById, getInvoice } from '@/services/api';
+import { getReservations, generateInvoiceForReservation, getAllInvoices, getInvoice } from '@/services/api';
 import { Reservation, Invoice, Order } from '@/models/types';
 
 interface InvoiceInput {
@@ -33,7 +33,9 @@ const InvoiceService: React.FC = () => {
   const loadReservations = async () => {
     const res = await getReservations();
     if (res) {
-      const completedReservations = res.filter(r => r.orders.some(o => o.status === 'Concluido'));
+      const completedReservations = res.filter((r: Reservation) =>
+        r.orders!.some((o: Order) => o.status === 'Concluido')
+      );
       setReservations(completedReservations);
     }
   };
