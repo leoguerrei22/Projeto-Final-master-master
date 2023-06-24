@@ -108,7 +108,7 @@ const InvoiceService: React.FC = () => {
 
   return (
     <div>
-      <button onClick={handleCreateModalOpen}>Create Invoice</button>
+      <button className='mb-3 cursor-pointer hover:underline' onClick={handleCreateModalOpen}>Create Invoice</button>
 
       {isCreateModalOpen && (
         // Modal de criação de invoice
@@ -183,11 +183,12 @@ const InvoiceService: React.FC = () => {
     </div>
   </div>
 )}
-      <h2>Invoices</h2>
-    <div >
+
+      <h2 className='mb-4 mt-2 text-2xl '>Invoices</h2>
+
       <ul>
         {invoices.map(invoice => (
-          <li key={invoice.id} onClick={() => handleInvoiceClick(invoice)} className='bg-white rounded-lg p-6 w-96 border border-solid border-gray-300 shadow-md cursor-pointer hover:underline'>
+          <li key={invoice.id} onClick={() => handleInvoiceClick(invoice)} className='bg-white rounded-lg p-6 w-96 border border-solid border-gray-300 shadow-md cursor-pointer'>
             <p>ID: {invoice.id}</p>
             <p>Name: {invoice.reservation?.user?.name}</p>
             <p>Billing Details: {invoice.billingDetails}</p>
@@ -195,7 +196,7 @@ const InvoiceService: React.FC = () => {
           </li>
         ))}
       </ul>
-      </div>
+
     </div>
   );
 }
