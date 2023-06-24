@@ -1,8 +1,8 @@
-// src/app/(backoffice)/components/admin/structure.tsx
 import React, { useState } from 'react';
 import TableService from './TableService';
 import UserService from './UserService';
 import ProductService from './productService';
+import InvoiceService from './invoiceService';
 
 const Admin: React.FC = () => {
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
@@ -36,6 +36,7 @@ const Admin: React.FC = () => {
         {selectedTable === 'Table' && <TableService selectedTable={selectedTable} />}
         {selectedTable === 'User' && <UserService />}
         {selectedTable === 'Product' && <ProductService />}
+        {selectedTable === 'Invoice' && <InvoiceService />}  {/* Adicione esta linha */}
       </div>
     </div>
   );

@@ -1,12 +1,22 @@
 import React, { useState } from 'react';
+import TableService from './service';
+
 
 const Salao: React.FC = () => {
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
+  const [action, setAction] = useState<string | null>(null);
 
-  const tables = ['Reservation', 'Table', 'Order'];
+  const tables = ['Reservation'];
+
+  const actions = ['Create', 'Manage'];
 
   const handleTableClick = (tableName: string) => {
     setSelectedTable(tableName === selectedTable ? null : tableName);
+    setAction(null); // Limpar a ação selecionada
+  };
+
+  const handleActionClick = (actionName: string) => {
+    setAction(actionName === action ? null : actionName);
   };
 
   return (
@@ -24,10 +34,11 @@ const Salao: React.FC = () => {
             </button>
             {selectedTable === table && (
               <div className="ml-4 flex flex-col space-y-2">
-                <button>Create</button>
-                <button>Read</button>
-                <button>Update</button>
-                <button>List</button>
+                {actions.map((action) => (
+                  <button onClick={() => handleActionClick(action)} key={action}>
+                    {action}
+                  </button>
+                ))}
               </div>
             )}
           </div>
@@ -36,8 +47,9 @@ const Salao: React.FC = () => {
 
       {/* Main Content */}
       <div className="w-4/5 bg-gray-200 p-4">
-        {/* Aqui é onde os inputs serão renderizados baseados no botão CRUD selecionado */}
         <h1 className="text-xl font-bold mb-4">Manage {selectedTable}</h1>
+        {selectedTable === 'Reservation' && action === 'Manage' && <TableService selectedTable={selectedTable} />}
+        {/* Adicione aqui os outros componentes correspondentes às tabelas e ações */}
       </div>
     </div>
   );

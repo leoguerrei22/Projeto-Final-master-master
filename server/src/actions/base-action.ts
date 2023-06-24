@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 
 export interface CrudServiceInterface {
     getAll: () => Promise<any[]>;
+    getAllOrder?: () => Promise<any[]>;
     getById: (id: number) => Promise<any>;
     create: (body: any) => Promise<any>;
     update: (id: number, body: any) => Promise<any>;
@@ -12,6 +13,8 @@ export interface CrudServiceInterface {
     generateInvoiceForReservation?: (reservationId: number, invoice: any) => Promise<any>;
     getAvailableTables?: (date: Date, hour: string) => Promise<any>;
     createReservation?: (data: any) => Promise<any>;
+    getAllReservation?: () => Promise<any[]>;
+    getAllInvoices?:() => Promise<any[]>;
 }
 
 export default class BaseAction {
@@ -146,5 +149,30 @@ async createReservation(req: Request, res: Response) {
     }
 }
 
+async getAllReservation(req: Request, res: Response) {
+    try {
+        const result = await this.service.getAllReservation();
+        return res.status(200).json(result);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+async getAllOrder(req: Request, res: Response) {
+    try {
+        const result = await this.service.getAllOrder();
+        return res.status(200).json(result);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+async getAllInvoices(req: Request, res: Response) {
+    try {
+        const result = await this.service.getAllInvoices();
+        return res.status(200).json(result);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
 
 }

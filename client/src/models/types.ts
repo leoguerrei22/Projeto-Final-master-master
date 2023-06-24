@@ -82,18 +82,25 @@ export interface Order {
   observations?: string;
   deleted?: boolean;
   createdAt?: string;
+  tableNumber?: number;
   updatedAt?: string;
   table?: Table;
   user?: User;
   reservation?: Reservation;
   products?: Product[];
   invoice?: Invoice;
+  orders?: any;
+  innerOrder?: any
+  orderProducts: OrderProduct[];
+  ReservationTable: ReservationTable[];
+
 }
 
 export interface Product {
   id: number;
   name: string;
   category: string;
+  quantity: number;
   observations?: string;
   status: string;
   price: number;
@@ -111,4 +118,12 @@ export interface Invoice {
   deleted?: boolean;
   user?: User;
   orders?: Order[];
+  reservation?: Reservation
+}
+
+export interface OrderProduct {
+  orderId: number;
+  productId: number;
+  quantity: number;
+  product: Product;
 }

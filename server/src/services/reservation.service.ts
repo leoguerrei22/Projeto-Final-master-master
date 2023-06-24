@@ -116,4 +116,104 @@
     
       return newReservation;
     }
-  }
+
+    async getAllReservation() {
+      return await this.prisma.reservation.findMany({
+        include: {
+          user: true,
+          reservationTables: {
+            include: {
+              table: true
+            }
+          },
+          orders: { // incluindo informações de pedidos
+            include: {
+              orderProducts: { // incluindo relação de produtos do pedido
+                include: {
+                  product: true // incluindo informações do produto
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    async getAllOrder() {
+      return await this.prisma.order.findMany({
+        include: {
+          reservation: {
+            include: {
+              reservationTables: {
+                include: {
+                  table: true
+                }
+              }
+            }
+          },
+          orderProducts: {
+            include: {
+              product: true
+            }
+          }
+        }
+      });
+    }
+
+    async getAllInvoices(): Promise<Invoice[]> {
+      return await this.prisma.invoice.findMany({
+        include: {
+          reservation: {
+            include: {
+              user: true,
+              reservationTables: {
+                include: {
+                  table: true,
+                },
+              },
+              orders: {
+                include: {
+                  orderProducts: {
+                    include: {
+                      product: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+    async getInvoiceById(invoiceId: number): Promise<Invoice | null> {
+      return await this.prisma.invoice.findUnique({
+        where: { id: invoiceId },
+        include: {
+          reservation: {
+            include: {
+              user: true,
+              reservationTables: {
+                include: {
+                  table: true,
+                },
+              },
+              orders: {
+                include: {
+                  orderProducts: {
+                    include: {
+                      product: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+  }    
+
+
+    
+
+    

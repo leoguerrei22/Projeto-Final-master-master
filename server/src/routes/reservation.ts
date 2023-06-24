@@ -6,7 +6,7 @@ const router = express.Router();
 
 const actions = new BaseAction(new ReservationService('reservation'));
 
-router.get('/', (req, res) => actions.all(req, res));
+router.get('/', (req, res) => actions.getAllReservation(req, res));
 router.post('/', (req, res) => actions.createReservation(req, res)); 
 router.get('/available-tables', (req, res) => actions.getAvailableTables(req, res));
 router.get('/:id', (req, res) => actions.detail(req, res));

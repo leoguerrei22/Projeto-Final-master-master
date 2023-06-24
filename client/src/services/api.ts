@@ -58,6 +58,23 @@ export async function createReservation(data: any) {
   const response = await api.post(`/reservation`, data);
   return response.data;
 }
+// Lista de invoices
+export async function getAllInvoices() {
+  const response = await api.get('/invoice');
+  return response.data;
+}
+
+// lista de reservas
+
+export async function getReservations() {
+    const response = await api.get('/reservation');
+    return response.data;
+}
+// lista de order
+export async function getAllOrder() {
+  const response = await api.get('/order');
+  return response.data;
+}
 // Generic API service
 const apiService = {
   async getAll(tableName: string) {
