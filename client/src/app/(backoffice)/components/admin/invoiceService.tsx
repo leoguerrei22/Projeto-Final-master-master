@@ -129,8 +129,8 @@ const InvoiceService: React.FC = () => {
 
 {isInvoiceModalOpen && selectedInvoice && (
   // Modal de exibição de invoice
-  <div className="fixed z-10 inset-0 flex items-center justify-center">
-    <div className="bg-white rounded-lg p-6 w-96">
+  <div className="fixed z-10 inset-0 flex items-center justify-center ">
+    <div className="bg-white rounded-lg p-6 w-96 border border-solid border-gray-300 shadow-md">
       <h1 className="text-lg font-medium mb-4">Zeferino Restaurante</h1>
       <p>
         <span className="font-medium">Recibo Nº:</span> {selectedInvoice.id}
@@ -139,16 +139,19 @@ const InvoiceService: React.FC = () => {
         <span className="font-medium">Reserva Nº:</span> {selectedInvoice.reservation?.id}
       </p>
       <p>
-        <span className="font-medium">Name:</span> {selectedInvoice.reservation?.user?.name}
+        <span className="font-medium">Mesa Nº:</span> {selectedInvoice.reservation!.reservationTables![0].table!.number}
       </p>
       <p>
-        <span className="font-medium">Date:</span> {selectedInvoice.reservation?.date.substring(0, 10)}
+        <span className="font-medium">Nome:</span> {selectedInvoice.reservation?.user?.name}
       </p>
       <p>
-        <span className="font-medium">Billing Details:</span> {selectedInvoice.billingDetails}
+        <span className="font-medium">Dia:</span> {selectedInvoice.reservation?.date.substring(0, 10)}
       </p>
       <p>
-        <span className="font-medium">Payment Method:</span> {selectedInvoice.paymentMethod}
+        <span className="font-medium">Documento:</span> {selectedInvoice.billingDetails}
+      </p>
+      <p>
+        <span className="font-medium">Forma de Pagamento:</span> {selectedInvoice.paymentMethod}
       </p>
       <hr className="my-4" />
       <p className="font-medium">Produtos:</p>
@@ -180,13 +183,11 @@ const InvoiceService: React.FC = () => {
     </div>
   </div>
 )}
-
-
-      <hr />
       <h2>Invoices</h2>
+    <div >
       <ul>
         {invoices.map(invoice => (
-          <li key={invoice.id} onClick={() => handleInvoiceClick(invoice)} className="cursor-pointer hover:underline">
+          <li key={invoice.id} onClick={() => handleInvoiceClick(invoice)} className='bg-white rounded-lg p-6 w-96 border border-solid border-gray-300 shadow-md cursor-pointer hover:underline'>
             <p>ID: {invoice.id}</p>
             <p>Name: {invoice.reservation?.user?.name}</p>
             <p>Billing Details: {invoice.billingDetails}</p>
@@ -194,6 +195,7 @@ const InvoiceService: React.FC = () => {
           </li>
         ))}
       </ul>
+      </div>
     </div>
   );
 }
