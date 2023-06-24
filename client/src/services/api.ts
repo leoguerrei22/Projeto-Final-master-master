@@ -75,6 +75,13 @@ export async function getAllOrder() {
   const response = await api.get('/order');
   return response.data;
 }
+
+// Obtenha um invoice específico pelo ID
+export async function getInvoice(invoiceId: number) {
+  const response = await api.get(`/invoice/${invoiceId}`);
+  return response.data;
+}
+
 // Generic API service
 const apiService = {
   async getAll(tableName: string) {

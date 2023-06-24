@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getReservations, generateInvoiceForReservation, getAllInvoices } from '@/services/api';
+import { getReservations, generateInvoiceForReservation, getAllInvoices, getInvoiceById, getInvoice } from '@/services/api';
 import { Reservation, Invoice, Order } from '@/models/types';
 
 interface InvoiceInput {
@@ -12,8 +12,10 @@ interface InvoiceInput {
 const InvoiceService: React.FC = () => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [reservations, setReservations] = useState<Reservation[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
+  const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
   const [invoice, setInvoice] = useState<InvoiceInput>({
     billingDetails: '',
     paymentMethod: '',
@@ -43,7 +45,16 @@ const InvoiceService: React.FC = () => {
 
   const handleReservationClick = (reservation: Reservation) => {
     setSelectedReservation(reservation);
-    setIsModalOpen(true);
+    setIsInvoiceModalOpen(true);
+  };
+
+  const handleInvoiceClick = async (invoice: Invoice) => {
+    setSelectedInvoice(invoice);
+    setIsInvoiceModalOpen(true);
+
+    // Load additional details of the invoice
+    const updatedInvoice = await getInvoice(invoice.id);
+    setSelectedInvoice(updatedInvoice);
   };
 
   const handleInvoiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,7 +72,7 @@ const InvoiceService: React.FC = () => {
           paymentStatus,
         });
         setSuccessMessage('Invoice created successfully');
-        setIsModalOpen(false);
+        setIsCreateModalOpen(false);
         setInvoice({
           billingDetails: '',
           paymentMethod: '',
@@ -75,83 +86,108 @@ const InvoiceService: React.FC = () => {
     }
   };
 
+  const handleCreateModalOpen = () => {
+    setIsCreateModalOpen(true);
+  };
+
   const handleModalClose = () => {
-    setIsModalOpen(false);
+    setIsCreateModalOpen(false);
+    setIsInvoiceModalOpen(false);
+  };
+
+  const calculateTotalAmount = (orderProducts: any[]): number => {
+    let total = 0;
+    for (const orderProduct of orderProducts) {
+      total += orderProduct.product.price * orderProduct.quantity;
+    }
+    console.log("tot", total)
+    return total;
   };
 
   return (
     <div>
-      <button onClick={() => setIsModalOpen(true)}>Create Invoice</button>
-      {isModalOpen && (
-        <div className="fixed z-10 inset-0 overflow-y-auto" role="dialog">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div className="sm:flex sm:items-start">
-                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                      Reservations
-                    </h3>
-                    <div className="mt-2">
-                      {reservations.map(reservation => (
-                        <div
-                          key={reservation.id}
-                          onClick={() => {
-                            handleReservationClick(reservation);
-                            handleModalClose();
-                          }}
-                          className="cursor-pointer hover:underline"
-                        >
-                          <p>
-                            Reserva: {reservation.id} / Mesa: {reservation.reservationTables?.[0]?.id} / Nome do Cliente:{' '}
-                            {reservation.user!.name}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button
-                  type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                  onClick={handleModalClose}
-                >
-                  Close
-                </button>
-              </div>
+      <button onClick={handleCreateModalOpen}>Create Invoice</button>
+
+      {isCreateModalOpen && (
+        // Modal de criação de invoice
+        <div className="fixed z-10 inset-0 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-6">
+            <h2>Create Invoice</h2>
+            <label>Billing Details<input type="text" name="billingDetails" onChange={handleInvoiceChange} /></label>
+            <label>Payment Method<input type="text" name="paymentMethod" onChange={handleInvoiceChange} /></label>
+            <label>Observations<input type="text" name="observations" onChange={handleInvoiceChange} /></label>
+            <label>Payment Status<input type="text" name="paymentStatus" onChange={handleInvoiceChange} /></label>
+            <div className="flex justify-end mt-4">
+              <button onClick={handleSubmit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-2 rounded">Submit</button>
+              <button onClick={handleModalClose} className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Cancel</button>
             </div>
           </div>
         </div>
       )}
-      {selectedReservation && (
-        <div>
-          <h2>Reservation: {selectedReservation.id}</h2>
-          <label>Billing Details<input type="text" name="billingDetails" onChange={handleInvoiceChange} /></label>
-          <label>Payment Method<input type="text" name="paymentMethod" onChange={handleInvoiceChange} /></label>
-          <label>Observations<input type="text" name="observations" onChange={handleInvoiceChange} /></label>
-          <label>Payment Status<input type="text" name="paymentStatus" onChange={handleInvoiceChange} /></label>
-          <div className="mt-4">
-            <button onClick={handleSubmit}>Submit</button>
-            <button onClick={handleModalClose}>Cancel</button>
-          </div>
-          {successMessage && <p className="text-green-500">{successMessage}</p>}
-          {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-        </div>
+
+{isInvoiceModalOpen && selectedInvoice && (
+  // Modal de exibição de invoice
+  <div className="fixed z-10 inset-0 flex items-center justify-center">
+    <div className="bg-white rounded-lg p-6 w-96">
+      <h1 className="text-lg font-medium mb-4">Zeferino Restaurante</h1>
+      <p>
+        <span className="font-medium">Recibo Nº:</span> {selectedInvoice.id}
+      </p>
+      <p>
+        <span className="font-medium">Reserva Nº:</span> {selectedInvoice.reservation?.id}
+      </p>
+      <p>
+        <span className="font-medium">Name:</span> {selectedInvoice.reservation?.user?.name}
+      </p>
+      <p>
+        <span className="font-medium">Date:</span> {selectedInvoice.reservation?.date.substring(0, 10)}
+      </p>
+      <p>
+        <span className="font-medium">Billing Details:</span> {selectedInvoice.billingDetails}
+      </p>
+      <p>
+        <span className="font-medium">Payment Method:</span> {selectedInvoice.paymentMethod}
+      </p>
+      <hr className="my-4" />
+      <p className="font-medium">Produtos:</p>
+      <ul className="ml-6 mb-4">
+        {selectedInvoice.reservation?.orders!.find(order => order.status === 'Concluido')?.orderProducts.map(orderProduct => (
+          <li key={orderProduct.product.id} className="flex items-center justify-between">
+            <span>
+              - {orderProduct.product.name} x {orderProduct.quantity}
+            </span>
+            <span>{orderProduct.product.price}</span>
+          </li>
+        ))}
+      </ul>
+      {selectedInvoice.reservation?.orders?.some(order => order.status === 'Concluido') ? (
+        <p className="text-lg font-semibold">
+          Total Amount: {calculateTotalAmount(selectedInvoice.reservation?.orders.find(order => order.status === 'Concluido')!.orderProducts)}
+        </p>
+      ) : (
+        <p>No completed orders</p>
       )}
-      <hr/>
+      <div className="flex justify-end mt-4">
+        <button
+          onClick={handleModalClose}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
+      <hr />
       <h2>Invoices</h2>
       <ul>
         {invoices.map(invoice => (
-          <li key={invoice.id}>
-            <p>Id: {invoice.id}</p>
-            <p>Name: {invoice.reservation!.user!.name}</p>
-            <p>Documento fatura: {invoice.billingDetails}</p>
+          <li key={invoice.id} onClick={() => handleInvoiceClick(invoice)} className="cursor-pointer hover:underline">
+            <p>ID: {invoice.id}</p>
+            <p>Name: {invoice.reservation?.user?.name}</p>
+            <p>Billing Details: {invoice.billingDetails}</p>
             {/* Exibir outras informações do invoice aqui */}
           </li>
         ))}

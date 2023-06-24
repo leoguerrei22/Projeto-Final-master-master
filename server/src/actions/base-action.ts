@@ -15,6 +15,8 @@ export interface CrudServiceInterface {
     createReservation?: (data: any) => Promise<any>;
     getAllReservation?: () => Promise<any[]>;
     getAllInvoices?:() => Promise<any[]>;
+    getInvoiceById: (id: number) => Promise<any>;
+
 }
 
 export default class BaseAction {
@@ -169,6 +171,17 @@ async getAllOrder(req: Request, res: Response) {
 async getAllInvoices(req: Request, res: Response) {
     try {
         const result = await this.service.getAllInvoices();
+        return res.status(200).json(result);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+
+async getInvoiceById(req: Request, res: Response) {
+    const { id } = req.params;
+    try {
+        const result = await this.service.getInvoiceById(+id);
         return res.status(200).json(result);
     } catch (error) {
         return res.status(500).json({ message: error.message });
