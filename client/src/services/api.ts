@@ -82,6 +82,12 @@ export async function getInvoice(invoiceId: number) {
   return response.data;
 }
 
+// enviar email
+export async function sendInvoiceEmail(invoiceId: number, email: string) {
+  const response = await api.post(`/invoice/${invoiceId}/email`, { email });
+  return response.data;
+}
+
 // Generic API service
 const apiService = {
   async getAll(tableName: string) {
