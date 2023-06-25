@@ -116,6 +116,7 @@ const InvoiceService: React.FC = () => {
           window.alert('Email sent successfully'); // Exibir um alerta informando o sucesso
           setIsInvoiceModalOpen(false)
         } else {
+          window.alert('Failed to send email');
           setErrorMessage('Failed to send email');
         }
       } catch (error) {
