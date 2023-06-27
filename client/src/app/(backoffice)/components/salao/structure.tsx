@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import TableService from './service';
+import ReservationForm from './createReservation';
 
 
 const Salao: React.FC = () => {
@@ -49,6 +50,14 @@ const Salao: React.FC = () => {
       <div className="w-4/5 bg-gray-200 p-4">
         <h1 className="text-xl font-bold mb-4">Manage {selectedTable}</h1>
         {selectedTable === 'Reservation' && action === 'Manage' && <TableService selectedTable={selectedTable} />}
+        {
+  selectedTable === 'Reservation' && action === 'Create' &&
+  <ReservationForm onSuccess={() => {
+    // Resetar a ação e a tabela selecionadas depois de criar a reserva com sucesso
+    setAction(null);
+    setSelectedTable(null);
+  }} />
+}
         {/* Adicione aqui os outros componentes correspondentes às tabelas e ações */}
       </div>
     </div>
