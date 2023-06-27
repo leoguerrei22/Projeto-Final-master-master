@@ -44,7 +44,7 @@ const Login: React.FC<LoginModalProps> = ({ closeModal }) => {
       if (error.response.data.message === 'Invalid credentials') {
         alert('Invalid email or password');
       } else {
-        setError('Failed to login');
+        alert('Failed to login');
       }
     }
     setLoading(false);
