@@ -39,9 +39,13 @@ const Login: React.FC<LoginModalProps> = ({ closeModal }) => {
       } else {
         setError('Not authorized to access this resource');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to login', error);
-      setError('Failed to login');
+      if (error.response.data.message === 'Invalid credentials') {
+        alert('Invalid email or password');
+      } else {
+        setError('Failed to login');
+      }
     }
     setLoading(false);
   };
