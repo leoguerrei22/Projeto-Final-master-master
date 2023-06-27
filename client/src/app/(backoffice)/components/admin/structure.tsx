@@ -7,7 +7,7 @@ import InvoiceService from './invoiceService';
 const Admin: React.FC = () => {
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
 
-  const tables = ['User', 'Reservation', 'Table', 'Product', 'Invoice', 'Order'];
+  const tables = ['User', 'Table', 'Product', 'Invoice'];
 
   const handleTableClick = (tableName: string) => {
     setSelectedTable(tableName === selectedTable ? null : tableName);

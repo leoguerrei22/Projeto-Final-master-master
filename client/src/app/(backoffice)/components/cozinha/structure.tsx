@@ -18,9 +18,9 @@ const Cozinha: React.FC = () => {
   const loadOrders = useCallback(async () => {
     try {
       const allOrders = await getAllOrder();
-  
+
       let filteredOrders: Order[] = [];
-  
+
       if (selectedCategory === 'todos') {
         const today = new Date().toISOString().substring(0, 10);
         filteredOrders = allOrders.filter((order: Order) => {
@@ -46,7 +46,7 @@ const Cozinha: React.FC = () => {
       }
 
       setOrders(filteredOrders);
-      if (filteredOrders.length === 0) {
+      if (filteredOrders.length === 0 && selectedCategory !== null) {
         setMessage('Não há pedidos disponíveis');
       } else {
         setMessage(null);
@@ -58,12 +58,22 @@ const Cozinha: React.FC = () => {
   }, [selectedCategory]);
 
   useEffect(() => {
-    const intervalId = setInterval(loadOrders, 5000);
+    if (selectedCategory !== null) {
+      // Chame loadOrders uma vez para carregar os pedidos imediatamente
+      loadOrders();
+    }
+  }, [selectedCategory, loadOrders]);
 
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [loadOrders]);
+  useEffect(() => {
+    if (selectedCategory !== null) {
+      // Configura o intervalo para atualizar os pedidos a cada 10 segundos
+      const intervalId = setInterval(loadOrders, 5000);
+
+      return () => {
+        clearInterval(intervalId);
+      };
+    }
+  }, [selectedCategory, loadOrders]);
 
   return (
     <div className="flex w-full h-screen">

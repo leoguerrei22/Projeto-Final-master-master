@@ -51,6 +51,7 @@ export interface Reservation {
   reservationTables?: ReservationTable[];
   orders?: Order[];
   user?: User;
+  status: string;
 }
 
 export interface Table {

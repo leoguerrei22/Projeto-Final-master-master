@@ -165,7 +165,7 @@ React.useEffect(() => {
       ) : (
         filteredTables.map((table: Table) => (
           <div key={table.id}>
-            <button onClick={() => handleExpand(table)}>Mesa {table.number}: {table.status}</button>
+            <button onClick={() => handleExpand(table)}>Mesa {table.number}: {table.status} </button>
             {selectedTableRow && selectedTableRow.id === table.id && (
               <div>
 <button className="ml-2 mt-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" onClick={() => handleDelete(table)}>Delete</button>

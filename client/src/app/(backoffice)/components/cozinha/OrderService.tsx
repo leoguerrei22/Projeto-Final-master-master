@@ -24,7 +24,7 @@ const OrderService: React.FC<OrderServiceProps> = ({ order }) => {
   };
   
   return (
-    <div className="flex flex-col space-y-2">
+    <div className='bg-white rounded-lg p-6 border border-solid border-gray-300 shadow-md cursor-pointer'>
       <h2>Pedido #{order.id}</h2>
       <p>Mesa: {order.reservation!.reservationTables![0]!.table!.number}</p>
       <p>Reserva: {order.reservationId}</p>

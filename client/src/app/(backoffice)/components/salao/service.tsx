@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import apiService, { addOrderToReservation, getUserDetails } from '@/services/api';
 import { Order, Product } from '@/models/types';
 import OrderModal from './order';
+import UpdateReservationModal from './updateReservation';
 
 type TableServiceProps = {
   selectedTable: string;
@@ -55,6 +56,7 @@ const TableService: React.FC<TableServiceProps> = ({ selectedTable }) => {
   const [error, setError] = useState(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false); // Add state to control OrderModal visibility
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false); // Add state to control UpdateModal visibility
 
   useEffect(() => {
     const fetchReservationsAndUsers = async () => {
@@ -126,6 +128,15 @@ const TableService: React.FC<TableServiceProps> = ({ selectedTable }) => {
     await apiService.update('reservation', reservation.id, reservation);
   };
 
+  const handleOpenUpdateModal = () => {
+    setIsUpdateModalOpen(true); // Open the UpdateModal
+  };
+
+  const handleCloseUpdateModal = () => {
+    setIsUpdateModalOpen(false); // Close the UpdateModal
+  };
+
+
   return (
     <div className="flex flex-col space-y-4">
       <input
@@ -143,7 +154,7 @@ const TableService: React.FC<TableServiceProps> = ({ selectedTable }) => {
       {error && <div>Error: {error}</div>}
       {reservations.map((reservation: Reservation) => (
         <div key={reservation.id}>
-       <button onClick={() => handleExpandReservation(reservation)}>
+       <button className='bg-white rounded-lg p-6 w-500 border border-solid border-gray-300 shadow-md cursor-pointer' onClick={() => handleExpandReservation(reservation)}>
   ID: {reservation.id} table: {reservation.reservationTables[0]?.table.number || "Mesa não disponível"} / Nome: {reservation.user.name} / Tel: {reservation.user.phone} / Email: {reservation.user.email}
 </button>
 {selectedReservation?.id === reservation.id && (  // Use selectedReservation to control if reservation details are shown
@@ -151,7 +162,7 @@ const TableService: React.FC<TableServiceProps> = ({ selectedTable }) => {
               <button    className="ml-2 mt-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                onClick={() => handleAddOrder(reservation)}>Adicionar pedido</button>
               <button    className="ml-2 mt-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-               onClick={() => handleUpdateReservation(reservation)}>Atualizar reserva</button>
+               onClick={handleOpenUpdateModal}>Atualizar reserva</button>
             </div>
           )}
         </div>
@@ -163,7 +174,12 @@ const TableService: React.FC<TableServiceProps> = ({ selectedTable }) => {
   products={products}
   addProductToReservation={addOrderToReservation} 
   selectedReservation={selectedReservation}
-/></div>
+/>
+<UpdateReservationModal
+        isOpen={isUpdateModalOpen}
+        handleClose={handleCloseUpdateModal}
+        reservation={selectedReservation}
+      /></div>
   );
 };
 
