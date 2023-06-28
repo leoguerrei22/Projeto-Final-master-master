@@ -55,7 +55,6 @@ const ProductService: React.FC = () => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
     setProduct({ ...product, [name]: value });
-    console.log('handleInputChange:', name, value); // Log adicionado
 
   };
 
@@ -74,14 +73,11 @@ const ProductService: React.FC = () => {
         
         };
         if (isUpdateMode) {
-          console.log('Update Mode:', product.id, preparedProduct); // Log adicionado
           response = await apiService.update('product', product.id, preparedProduct);
           const updatedProducts = products.map((p) => p.id === product.id ? response : p);
           setProducts(updatedProducts);
       } else {
-          console.log('Create Mode:', product.id, preparedProduct); // Log adicionado
           response = await apiService.create('product', preparedProduct);
-          console.log('Create Mode Response:', response); // Log adicionado
           setProducts([...products, response]);
       }
       
@@ -140,8 +136,6 @@ const ProductService: React.FC = () => {
   };
 
   const handleDetails = async (id: number) => {
-    console.log('Product ID:', id); // Log adicionado
-
     setIsLoading(true);
     try {
       const response = await apiService.getById('product', id);

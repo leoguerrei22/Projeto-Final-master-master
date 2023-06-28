@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent} from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import {
   getReservations,
   generateInvoiceForReservation,
@@ -32,7 +32,6 @@ const InvoiceService: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [email, setEmail] = useState("");
-
 
   useEffect(() => {
     loadReservations();
@@ -70,9 +69,13 @@ const InvoiceService: React.FC = () => {
     setSelectedInvoice(updatedInvoice);
   };
 
-  const handleInvoiceChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInvoiceChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     if (e.target.name === "reservation") {
-      const selectedRes = reservations.find(res => Number(res.id) === Number(e.target.value));
+      const selectedRes = reservations.find(
+        (res) => Number(res.id) === Number(e.target.value)
+      );
       setSelectedReservation(selectedRes || null);
     } else {
       setInvoice({ ...invoice, [e.target.name]: e.target.value });
@@ -263,19 +266,26 @@ const InvoiceService: React.FC = () => {
             <hr className="my-4" />
             <p className="font-medium">Produtos:</p>
             <ul className="ml-6 mb-4">
-              {selectedInvoice.reservation
-                ?.orders!.find((order) => order.status === "Concluido")
-                ?.orderProducts.map((orderProduct) => (
-                  <li
-                    key={orderProduct.product.id}
-                    className="flex items-center justify-between"
-                  >
-                    <span>
-                      - {orderProduct.product.name} x {orderProduct.quantity}
-                    </span>
-                    <span>{orderProduct.product.price}</span>
-                  </li>
-                ))}
+            {selectedInvoice.reservation?.orders
+  ?.filter((order) => order.status === "Concluido")
+  .flatMap((order) =>
+    order.orderProducts.map((orderProduct) => ({
+      ...orderProduct,
+      productName: orderProduct.product.name,
+      productPrice: orderProduct.product.price,
+    }))
+  )
+  .map((orderProduct) => (
+    <li
+      key={orderProduct.product.id}
+      className="flex items-center justify-between"
+    >
+      <span>
+        - {orderProduct.productName} x {orderProduct.quantity}
+      </span>
+      <span>{orderProduct.productPrice}</span>
+    </li>
+  ))}
             </ul>
             {selectedInvoice.reservation?.orders?.some(
               (order) => order.status === "Concluido"
@@ -283,9 +293,14 @@ const InvoiceService: React.FC = () => {
               <p className="text-lg font-semibold">
                 Total Amount:{" "}
                 {calculateTotalAmount(
-                  selectedInvoice.reservation?.orders.find(
-                    (order) => order.status === "Concluido"
-                  )!.orderProducts
+                  selectedInvoice.reservation?.orders
+                    ?.filter((order) => order.status === "Concluido")
+                    ?.flatMap((order) =>
+                      order.orderProducts.map((orderProduct) => ({
+                        ...orderProduct,
+                        price: orderProduct.product.price,
+                      }))
+                    ) || []
                 )}
               </p>
             ) : (

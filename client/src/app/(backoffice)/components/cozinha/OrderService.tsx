@@ -9,7 +9,6 @@ interface OrderServiceProps {
 const statusList = ['Cancelado', 'Pendente', 'Preparando', 'Pronto', 'Concluido'];
 
 const OrderService: React.FC<OrderServiceProps> = ({ order }) => {
-  console.log("OrderService rendered");
 
   const [status, setStatus] = useState(order.status);
 

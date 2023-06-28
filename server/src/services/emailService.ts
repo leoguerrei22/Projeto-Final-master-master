@@ -22,7 +22,6 @@ export async function sendEmail(content: string, to: string) {
             if (error) {
                 reject(error);
             } else {
-                console.log('Email sent: ' + info.response);
                 resolve(info);
             }
         });

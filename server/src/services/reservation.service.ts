@@ -101,12 +101,12 @@
     async createReservation(data: any) {
       const { tableId, ...reservationData } = data;
     
-      // Primeiro, crie a reserva
+      // Primeiro, cria a reserva
       const newReservation = await this.prisma.reservation.create({
         data: reservationData
       });
     
-      // Em seguida, crie uma nova entrada em ReservationTable para associar a reserva à mesa
+      // Em seguida, cria uma nova entrada em ReservationTable para associar a reserva à mesa
       await this.prisma.reservationTable.create({
         data: {
           reservationId: newReservation.id,

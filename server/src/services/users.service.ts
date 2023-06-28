@@ -46,7 +46,7 @@ export default class UsersService extends CrudService {
       return {
         token: token,
         id: user.id,
-        role: user.role, // supondo que `role` é uma propriedade do usuário
+        role: user.role, 
       };
     } else {
       throw new Error('Invalid credentials');

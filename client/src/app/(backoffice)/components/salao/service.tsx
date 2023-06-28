@@ -114,7 +114,6 @@ const TableService: React.FC<TableServiceProps> = ({ selectedTable }) => {
   };
 
   const handleAddOrder = (reservation: Reservation) => {
-    console.log("handleAddOrder called");
   
     setSelectedReservation(reservation); // Set the selected reservation
     setIsOrderModalOpen(true); // Open the OrderModal

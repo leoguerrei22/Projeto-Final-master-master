@@ -21,7 +21,6 @@ const requestLogger = (
   response: Response,
   next: NextFunction
 ) => {
-  console.log(`[${request.method}] => url:: ${request.url}`);
 
   next();
 };
@@ -35,5 +34,4 @@ app.use(routes);
 // Start the server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
-  console.log(`Server is running in http://localhost:${PORT}`);
 });

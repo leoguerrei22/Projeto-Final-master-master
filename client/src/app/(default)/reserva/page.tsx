@@ -45,7 +45,6 @@ export default function Reservations() {
     // You can handle the reservation here.
     try {
       const createdReservation = await apiService.create('reservation', reservation);
-      console.log('Successfully created reservation:', createdReservation);
     } catch(error) {
       console.error('Error creating reservation:', error);
     }

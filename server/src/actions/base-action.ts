@@ -132,7 +132,6 @@
 
         try {
             const availableTables = await this.service.getAvailableTables(new Date(date as string), hour as string);
-            console.log(availableTables);
             return res.status(200).json(availableTables);
         } catch (error) {
             return res.status(500).json({ message: error.message });
